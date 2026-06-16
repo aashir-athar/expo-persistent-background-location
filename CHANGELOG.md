@@ -12,6 +12,32 @@ major version.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-06-17
+
+Correctness fixes from a second-pass adversarial review (Android / iOS). No public
+API changes.
+
+### Fixed
+
+- **Android: `stop()` is no longer a silent no-op when the app is backgrounded.**
+  It used `startService()`, which throws on API 26+ in the background (and was
+  swallowed), so tracking kept running. It now uses `startForegroundService()` —
+  permitted because the service is already foreground.
+- **Android: a config-less STOP delivery can no longer crash** the
+  `startForegroundService()` 5-second contract — STOP now always promotes (using
+  default config as a fallback) before tearing down.
+- **iOS: the in-memory config (which may hold `buffer.headers` auth token) is now
+  cleared on `stop()`**, matching the persisted-blob wipe, so a `flush()` after
+  `stop()` can't reuse old credentials.
+- **iOS: `getStatus()` now returns an internally consistent snapshot** (all fields
+  read under one lock instead of across lock epochs).
+- **iOS: a single-flight sync collision no longer emits a spurious
+  `onSync { error: "busy" }`** event.
+
+### CI
+
+- Bumped `actions/checkout` + `actions/setup-node` to `@v6` (Node 24 runtime).
+
 ## [0.1.0] - 2026-06-16
 
 ### Added

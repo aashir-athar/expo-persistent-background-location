@@ -134,6 +134,10 @@ final class LocationController: NSObject, CLLocationManagerDelegate {
       self.stopAutoSyncTimer()
       self.running = false
       self.isMoving = false
+      // Drop the in-memory config too — it may carry auth headers/token. Pairs
+      // with ConfigStore.markStopped() which wipes the persisted blob, so a
+      // flush() after stop() can no longer reuse the old credentials.
+      self.config = nil
       self.resetMotion()
       ConfigStore.markStopped()
     }
@@ -180,15 +184,18 @@ final class LocationController: NSObject, CLLocationManagerDelegate {
   }
 
   func statusDictionary() -> [String: Any?] {
+    // Read all cross-thread state under a single lock so the snapshot is
+    // internally consistent (no mixing of pre- and post-update epochs).
+    let snapshot = lockState { (_running, _lastFix, _isMoving, _trackingSince) }
     let authorization = LocationPermissions.string(for: LocationPermissions.shared.currentStatus())
     return [
-      "running": running,
-      "lastFix": lastFix?.toDictionary(),
+      "running": snapshot.0,
+      "lastFix": snapshot.1?.toDictionary(),
       "bufferedCount": LocationBufferStore.shared.count(),
       "authorization": authorization,
       "locationServicesEnabled": CLLocationManager.locationServicesEnabled(),
-      "isMoving": isMoving,
-      "trackingSince": trackingSince > 0 ? Double(trackingSince) : nil
+      "isMoving": snapshot.2,
+      "trackingSince": snapshot.3 > 0 ? Double(snapshot.3) : nil
     ]
   }
 
@@ -347,6 +354,9 @@ final class LocationController: NSObject, CLLocationManagerDelegate {
 
   private func runSync(_ config: LocationConfig) {
     LocationSyncer.shared.flush(config) { result in
+      // "busy" just means a flush was already in-flight (single-flight) — not a
+      // real sync outcome, so don't surface it to JS.
+      if result.error == "busy" { return }
       if result.count > 0 || !result.success {
         self.emit(PBLConstants.eventSync, result.toDictionary())
       }

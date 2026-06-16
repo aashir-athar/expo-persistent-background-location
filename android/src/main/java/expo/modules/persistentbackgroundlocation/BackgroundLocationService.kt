@@ -66,9 +66,11 @@ class BackgroundLocationService : Service() {
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     if (intent?.action == Constants.ACTION_STOP) {
-      // Even on the stop path, honor the startForegroundService() 5s contract for
-      // any delivery that may have promoted us, then tear everything down.
-      ConfigStore.load(this)?.let { startInForeground(it) }
+      // Always honor the startForegroundService() 5s contract before tearing
+      // down — even if the saved config is gone, fall back to defaults so a
+      // config-less STOP delivery can't trigger a "did not call startForeground"
+      // crash. Then shut everything down.
+      startInForeground(ConfigStore.load(this) ?: LocationConfig.defaults())
       shutdown(markStopped = true)
       return START_NOT_STICKY
     }
@@ -400,7 +402,12 @@ class BackgroundLocationService : Service() {
     fun stop(context: Context) {
       val intent = Intent(context, BackgroundLocationService::class.java)
         .setAction(Constants.ACTION_STOP)
-      runCatching { context.startService(intent) }
+      // Use startForegroundService, not startService: the latter throws
+      // IllegalStateException when the app is backgrounded (API 26+), which would
+      // make stop() a silent no-op — the common case for a background tracker.
+      // The service is already foreground, so this is permitted; the STOP branch
+      // re-promotes to honor the 5s contract, then stops.
+      runCatching { ContextCompat_startForegroundService(context, intent) }
     }
 
     private fun ContextCompat_startForegroundService(context: Context, intent: Intent) {
