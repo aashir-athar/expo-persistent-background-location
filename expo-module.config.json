@@ -1,0 +1,12 @@
+{
+  "platforms": ["android", "ios"],
+  "android": {
+    "modules": [
+      "expo.modules.persistentbackgroundlocation.ExpoPersistentBackgroundLocationModule"
+    ]
+  },
+  "ios": {
+    "modules": ["ExpoPersistentBackgroundLocationModule"],
+    "appDelegateSubscribers": ["ExpoPersistentBackgroundLocationAppDelegate"]
+  }
+}

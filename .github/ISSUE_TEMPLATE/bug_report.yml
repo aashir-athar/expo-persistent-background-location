@@ -1,0 +1,131 @@
+name: Bug report
+description: Report a reproducible problem with expo-persistent-background-location.
+title: '[Bug]: '
+labels: ['bug', 'needs-triage']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug! Background-location bugs are
+        deeply platform- and device-specific, so the more detail you give, the
+        faster this gets fixed.
+
+        Before filing, please check:
+        - You are on the latest version (`npm install expo-persistent-background-location@latest`).
+        - You are running a **dev client** or EAS build — this native module does **not** work in Expo Go.
+        - Your issue isn't an explicitly out-of-scope item (OEM task-killers on
+          Xiaomi/Huawei/Samsung, ML battery optimization) — see the README "Honest scope" section.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Preflight checklist
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+        - label: I am on the latest version of the package.
+          required: true
+        - label: I am running a dev client / EAS build (not Expo Go).
+          required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      description: Which platform(s) does this affect?
+      options:
+        - Android
+        - iOS
+        - Both
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: library-version
+    attributes:
+      label: Library version
+      description: Version of `expo-persistent-background-location`.
+      placeholder: e.g. 0.1.0
+    validations:
+      required: true
+
+  - type: input
+    id: expo-sdk
+    attributes:
+      label: Expo SDK version
+      description: From your `package.json` (the `expo` dependency).
+      placeholder: e.g. 56.0.12
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: Device + OS version
+      description: Physical device strongly preferred — background location behaves differently on simulators/emulators.
+      placeholder: e.g. Pixel 8 (Android 15) / iPhone 14 (iOS 18.4)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: app-state
+    attributes:
+      label: App state when the bug occurs
+      description: This is the single most important field for a background-location bug.
+      options:
+        - Foreground (app open and visible)
+        - Background (app open but not visible)
+        - Killed / swiped away (Android)
+        - Force-quit / terminated (iOS)
+        - After device reboot (boot restart)
+        - Not state-dependent / unsure
+      default: 5
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: A minimal, reliable repro. Include your `start()` options and config plugin settings if relevant.
+      placeholder: |
+        1. Call `requestPermissions()` and grant "Always".
+        2. Call `start({ accuracy: 'high', ... })`.
+        3. Swipe the app away from recents.
+        4. Walk 500 m.
+        5. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What actually happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        Relevant native logs. For Android use `adb logcat`; for iOS use the
+        Xcode/Console output. Enable verbose logging with `start({ debug: true })`.
+        Please redact any precise coordinates or auth tokens.
+      render: shell
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Anything else — battery-optimization settings, sync backend behavior, screenshots, etc.

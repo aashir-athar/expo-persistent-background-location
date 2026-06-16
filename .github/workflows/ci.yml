@@ -1,0 +1,53 @@
+name: CI
+
+# Lint, build (src + config plugin), and validate the published file set.
+# Intentionally does NOT run the Android Gradle or iOS xcodebuild native
+# compiles: those require a full `expo prebuild` of the example app and are
+# slow + flaky in CI. Native correctness is verified on-device (see CONTRIBUTING.md).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Cancel superseded runs on the same ref to save CI minutes.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Lint & build (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # 20 is the primary target; 22 catches forward-compat regressions.
+        node-version: ['20', '22']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint (expo-module lint)
+        run: npm run lint
+
+      - name: Build (expo-module build — src + plugin)
+        run: npm run build
+
+      - name: Validate published file set (npm pack --dry-run)
+        run: npm pack --dry-run

@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "pbl-example",
+    "slug": "pbl-example",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "platforms": ["ios", "android"],
+    "ios": {
+      "bundleIdentifier": "com.aashirathar.pblexample",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.aashirathar.pblexample"
+    },
+    "plugins": [
+      [
+        "expo-persistent-background-location",
+        {
+          "locationWhenInUsePermission": "Allow the demo to use your location while tracking your route.",
+          "locationAlwaysAndWhenInUsePermission": "Allow the demo to keep tracking your route in the background.",
+          "isAndroidBackgroundLocationEnabled": true,
+          "isActivityRecognitionEnabled": true
+        }
+      ]
+    ]
+  }
+}

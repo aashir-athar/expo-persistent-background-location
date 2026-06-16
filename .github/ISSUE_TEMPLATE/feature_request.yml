@@ -1,0 +1,66 @@
+name: Feature request
+description: Suggest a new capability or improvement for expo-persistent-background-location.
+title: '[Feature]: '
+labels: ['enhancement', 'needs-triage']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the idea! Please note the project's deliberately honest scope:
+        continuous GPS after iOS force-quit (only significant-location-change can
+        wake the app), OEM task-killer survival (Xiaomi/Huawei/Samsung), and ML
+        battery optimization are **out of scope** for v1. Requests in those areas
+        are welcome as discussion but may be declined as documented limitations.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Preflight checklist
+      options:
+        - label: I searched existing issues / discussions and this is not a duplicate.
+          required: true
+        - label: I read the README "Honest scope" section and this is not an explicitly out-of-scope item.
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / motivation
+      description: What problem are you trying to solve? What's the use case (fitness, delivery, fleet, geofencing, ...)?
+      placeholder: I'm building a run-tracker and I need ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the API or behavior you'd like. A sketched-out function signature or `StartOptions` field helps a lot.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform(s)
+      description: Which platform(s) would this feature target?
+      options:
+        - Android
+        - iOS
+        - Both
+        - Platform-agnostic (JS API only)
+      default: 2
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you've tried or considered, including existing options that almost work.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Links, prior art (e.g. how TransistorSoft handles it), screenshots, or willingness to contribute a PR.

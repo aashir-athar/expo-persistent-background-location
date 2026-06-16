@@ -1,0 +1,82 @@
+{
+  "name": "expo-persistent-background-location",
+  "version": "0.1.0",
+  "description": "A free, open-source Expo module (SDK 56, New Architecture) that keeps continuous background GPS alive and auto-restarts after the app is killed or swiped away on Android (foreground service + boot receiver) and resumes after termination on iOS (significant-location-change + region monitoring). Buffers fixes to native SQLite with offline HTTP sync. The open escape from the TransistorSoft Android-release paywall.",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "expo-module build && expo-module build plugin",
+    "build:plugin": "expo-module build plugin",
+    "clean": "expo-module clean",
+    "lint": "expo-module lint",
+    "test": "expo-module test",
+    "prepare": "expo-module prepare",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module",
+    "open:android": "open -a \"Android Studio\" example/android",
+    "open:ios": "xed example/ios"
+  },
+  "keywords": [
+    "react-native",
+    "expo",
+    "expo-module",
+    "expo-modules",
+    "expo-sdk-56",
+    "background-location",
+    "background-geolocation",
+    "geolocation",
+    "gps",
+    "location-tracking",
+    "foreground-service",
+    "boot-receiver",
+    "significant-location-change",
+    "geofencing",
+    "fitness-tracking",
+    "run-tracking",
+    "delivery",
+    "fleet-tracking",
+    "courier",
+    "offline-sync",
+    "killed-app",
+    "android",
+    "ios",
+    "kotlin",
+    "swift",
+    "new-architecture",
+    "turbomodule"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aashir-athar/expo-persistent-background-location.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aashir-athar/expo-persistent-background-location/issues"
+  },
+  "author": "aashir-athar (https://github.com/aashir-athar)",
+  "license": "MIT",
+  "homepage": "https://github.com/aashir-athar/expo-persistent-background-location#readme",
+  "files": [
+    "build",
+    "android",
+    "ios",
+    "src",
+    "plugin/build",
+    "app.plugin.js",
+    "expo-module.config.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "app.plugin.js": "./app.plugin.js",
+  "peerDependencies": {
+    "expo": ">=54.0.0",
+    "react": "*",
+    "react-native": "*"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.0",
+    "expo": "^56.0.12",
+    "expo-module-scripts": "^56.0.3",
+    "expo-modules-core": "~56.0.17"
+  }
+}

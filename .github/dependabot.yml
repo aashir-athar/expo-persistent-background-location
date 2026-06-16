@@ -1,0 +1,41 @@
+version: 2
+
+updates:
+  # Root npm package (library deps, devDeps, peerDeps).
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+      - javascript
+    commit-message:
+      prefix: 'chore(deps)'
+      prefix-development: 'chore(deps-dev)'
+    groups:
+      # Batch low-risk dev tooling bumps into a single PR.
+      dev-dependencies:
+        dependency-type: development
+
+  # GitHub Actions used in the workflows above.
+  - package-ecosystem: github-actions
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - github-actions
+    commit-message:
+      prefix: 'ci(actions)'
+    groups:
+      github-actions:
+        patterns:
+          - '*'

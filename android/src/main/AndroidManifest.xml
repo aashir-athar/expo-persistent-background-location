@@ -1,0 +1,59 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+      Non-optional permissions the service genuinely cannot run without are
+      declared here so they merge into any consuming app even before the config
+      plugin runs. The *optional* asks — ACCESS_BACKGROUND_LOCATION and
+      ACTIVITY_RECOGNITION — are deliberately NOT declared here; the Expo config
+      plugin injects them (and honours `isAndroidBackgroundLocationEnabled` /
+      `isActivityRecognitionEnabled` opt-outs) so a consumer is never forced to
+      declare a heavyweight Play-Store-reviewed permission they did not opt into.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application>
+
+        <!--
+          The location foreground service. `foregroundServiceType="location"` is
+          mandatory from Android 14 (API 34) and is what lets the GPS stream keep
+          running after the task is swiped away.
+        -->
+        <service
+            android:name=".BackgroundLocationService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="location"
+            android:stopWithTask="false" />
+
+        <!-- Re-arms tracking after a reboot / package replace. -->
+        <receiver
+            android:name=".BootBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Receives ActivityRecognition transitions via our own PendingIntent. -->
+        <receiver
+            android:name=".ActivityRecognitionReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+    </application>
+
+</manifest>

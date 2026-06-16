@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions & discussions
+    url: https://github.com/aashir-athar/expo-persistent-background-location/discussions
+    about: Ask how-to questions, share setups, and discuss ideas before filing an issue.
+  - name: Security / privacy disclosure
+    url: https://github.com/aashir-athar/expo-persistent-background-location/security/policy
+    about: This library handles location data (PII). Report vulnerabilities privately — do not open a public issue.
