@@ -12,6 +12,25 @@ major version.
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-06-17
+
+Android build fix — the module now compiles under **Kotlin 2.1 (K2)** / Gradle 9
+(used by Expo SDK 56 release builds). No public API or behavior changes.
+
+### Fixed
+
+- **`ActivityRecognitionHelper`: explicit lambda parameter type.** The
+  activity-transition builder chain (`TRACKED_ACTIVITIES.map { type -> … }`) failed
+  K2 type inference through the Java `ActivityTransition.Builder` platform type
+  (surfacing as a cascading "Unresolved reference `setActivityTransitionType`").
+  The lambda param is now annotated `type: Int`.
+- **`BackgroundLocationService.start` is now `internal`.** It is a `public`
+  function that takes the `internal` `LocationConfig`, which K2 rejects
+  ("'public' function exposes its 'internal' parameter type"). All callers are
+  in-module, so it is now `internal`.
+- **`getCurrentPosition`: `suspendCancellableCoroutine` pinned to `<Location?>`.**
+  K2 inferred the continuation type as `Nothing?`, rejecting `cont.resume(location)`.
+
 ## [0.1.1] - 2026-06-17
 
 Correctness fixes from a second-pass adversarial review (Android / iOS). No public

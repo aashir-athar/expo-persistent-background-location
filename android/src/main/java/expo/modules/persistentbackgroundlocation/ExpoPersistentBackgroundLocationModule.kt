@@ -1,6 +1,7 @@
 package expo.modules.persistentbackgroundlocation
 
 import android.content.Context
+import android.location.Location
 import android.os.Looper
 import android.util.Log
 import expo.modules.kotlin.exception.CodedException
@@ -140,7 +141,7 @@ class ExpoPersistentBackgroundLocationModule : Module() {
         )
       }
       val engine = LocationEngineFactory.create(ctx)
-      val location = suspendCancellableCoroutine { cont ->
+      val location = suspendCancellableCoroutine<Location?> { cont ->
         engine.getCurrentLocation(
           accuracy = options.accuracy,
           timeoutMs = options.timeoutMs,

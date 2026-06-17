@@ -1,6 +1,6 @@
 {
   "name": "expo-persistent-background-location",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A free, open-source Expo module (SDK 56, New Architecture) that keeps continuous background GPS alive and auto-restarts after the app is killed or swiped away on Android (foreground service + boot receiver) and resumes after termination on iOS (significant-location-change + region monitoring). Buffers fixes to native SQLite with offline HTTP sync. The open escape from the TransistorSoft Android-release paywall.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
