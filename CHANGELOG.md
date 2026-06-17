@@ -12,6 +12,23 @@ major version.
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-06-17
+
+Completes the Android Kotlin 2.1 (K2) / Gradle 9 build fix. The module now
+**compiles cleanly**, verified locally with the exact failing toolchain
+(`compileReleaseKotlin` against Kotlin 2.1.20, Gradle 9.3.1,
+play-services-location 21.3.0). No public API or behavior changes.
+
+### Fixed
+
+- **`ActivityRecognitionHelper`: corrected the activity-transition builder method
+  name.** The chain called `setActivityTransitionType(...)`, which does **not
+  exist** in `play-services-location` 21.x — the real method is
+  `setActivityTransition(Int)` (confirmed via `javap` on the resolved artifact).
+  This was the actual remaining compile error; 0.1.2's lambda-type tweak did not
+  address it, and the accompanying "cannot infer type" error was only a cascade
+  from this unresolved call (it disappears once the method name is right).
+
 ## [0.1.2] - 2026-06-17
 
 Android build fix — the module now compiles under **Kotlin 2.1 (K2)** / Gradle 9
